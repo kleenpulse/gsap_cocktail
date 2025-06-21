@@ -1,9 +1,10 @@
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis } from "lenis/react";
 
 import Navbar from "./components/nav-bar";
 import Hero from "./components/hero";
+import Cocktails from "./components/cocktails";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -15,7 +16,7 @@ function App() {
 			<main className="">
 				<Navbar />
 				<Hero />
-				<div className="min-h-screen bg-black" />
+				<Cocktails />
 			</main>
 		</>
 	);

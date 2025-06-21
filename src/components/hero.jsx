@@ -2,8 +2,13 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
 import Lenis from "lenis";
+import { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
 export default function Hero() {
+	const videoRef = useRef(null);
+	const isMobile = useMediaQuery({ maxWidth: 767 });
+
 	useGSAP(() => {
 		const lenis = new Lenis();
 		lenis.on("scroll", ScrollTrigger.update);
@@ -57,6 +62,25 @@ export default function Hero() {
 				0
 			);
 
+		const startValue = isMobile ? "top 50%" : "center 60%";
+		const endValue = isMobile ? "120% top" : "bottom top";
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: "video",
+				start: startValue,
+				end: endValue,
+				scrub: true,
+				pin: true,
+			},
+		});
+
+		videoRef.current.onloadedmetadata = () => {
+			tl.to(videoRef.current, {
+				currentTime: videoRef.current.duration,
+			});
+		};
+
 		gsap.ticker.add((time) => {
 			lenis.raf(time * 1000); // Convert time from seconds to milliseconds
 		});
@@ -106,6 +130,12 @@ export default function Hero() {
 					</div>
 				</div>
 			</section>
+
+			<div className="video absolute inset-0">
+				<video muted playsInline preload="auto" ref={videoRef}>
+					<source src="/videos/output.mp4" type="video/mp4" />
+				</video>
+			</div>
 		</>
 	);
 }
